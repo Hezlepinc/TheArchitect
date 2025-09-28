@@ -3,8 +3,8 @@
     name: thearchitect-api
     env: node
     rootDir: server
-    buildCommand: npm ci
-    startCommand: node ./index.js
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -29,4 +29,4 @@
     name: thearchitect-widget
     rootDir: client-widget
     buildCommand: npm ci && npm run build:widget && npm run build:site
-    publishPath: client-widget/build
+    publishPath: build
