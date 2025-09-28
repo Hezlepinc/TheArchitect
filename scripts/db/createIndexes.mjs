@@ -15,12 +15,15 @@ async function main(){
   const db = client.db(dbName);
   const Messages = db.collection("messages");
   const Conversations = db.collection("conversations");
+  const FeedbackLog = db.collection("FeedbackLog");
 
   await Messages.createIndex({ conversation_id: 1, timestamp: 1 });
   await Messages.createIndex({ brand_id: 1, conversation_id: 1 });
   await Conversations.createIndex({ brand_id: 1, started_at: 1 });
+  await FeedbackLog.createIndex({ brand: 1, region: 1, persona: 1, createdAt: -1 });
+  await FeedbackLog.createIndex({ sessionId: 1, createdAt: -1 });
 
-  console.log("Indexes ensured on messages and conversations");
+  console.log("Indexes ensured on messages, conversations, and FeedbackLog");
 }
 
 main().then(()=>client.close()).catch((e)=>{ console.error(e); process.exit(1); });

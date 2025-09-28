@@ -36,7 +36,9 @@ export async function generateReply({ message, config, primaryModel, fallbackMod
   try {
     if (process.env.PINECONE_API_KEY && process.env.PINECONE_INDEX && process.env.OPENAI_API_KEY) {
       const brandId = String(config.brand || "").toLowerCase();
-      const snippets = await retrieveSnippets({ brandId, query: message, topK: 5 });
+      const regionId = String(config.region || "").toLowerCase();
+      const personaId = String(config.persona || "").toLowerCase();
+      const snippets = await retrieveSnippets({ brandId, regionId, personaId, query: message, topK: 5 });
       if (Array.isArray(snippets) && snippets.length) {
         const ctx = "Relevant info:\n" + snippets.map((s, i) => `(${i + 1}) ${s.text}`).join("\n\n");
         systemPrompt = systemPrompt + "\n" + ctx;

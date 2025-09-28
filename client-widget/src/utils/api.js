@@ -20,3 +20,15 @@ export async function getAssistantConfig(brand, region, persona) {
   if (!res.ok) throw new Error("Failed to load assistant config");
   return res.json();
 }
+
+export async function submitFeedback(brand, region, persona, payload) {
+  const res = await fetch(
+    `${API_BASE}/api/feedback/${brand}/${region}/${persona}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    }
+  );
+  return res.json();
+}
