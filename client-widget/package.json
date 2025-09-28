@@ -6,6 +6,8 @@
     "scripts":  {
                     "dev":  "vite",
                     "build":  "vite build",
+                    "build:production":  "vite build --mode production",
+                    "build:staging":  "vite build --mode staging",
                     "preview":  "vite preview",
                     "build:widget":  "vite build",
                     "preview:demo":  "npx serve demo -l 8080",

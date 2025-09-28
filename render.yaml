@@ -1,32 +1,108 @@
 ﻿services:
+  # ----------------------
+  # Backend: Server (Prod)
+  # ----------------------
   - type: web
-    name: thearchitect-api
+    name: thearchitect-server-prod
     env: node
     rootDir: server
-    buildCommand: npm install
+    buildCommand: npm install && npm run build
     startCommand: npm start
+    plan: starter
+    domains:
+      - api.incharge-ai.com
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 3000
-      - key: CORS_ORIGIN
+      - key: MONGO_URI
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: PINECONE_API_KEY
         sync: false
       - key: OPENAI_API_KEY
         sync: false
       - key: ANTHROPIC_API_KEY
         sync: false
-      - key: MONGODB_URI
+
+  # ----------------------
+  # Backend: Server (Staging)
+  # ----------------------
+  - type: web
+    name: thearchitect-server-staging
+    env: node
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    plan: starter
+    domains:
+      - staging-api.incharge-ai.com
+    envVars:
+      - key: NODE_ENV
+        value: staging
+      - key: MONGO_URI
         sync: false
-      - key: MONGODB_DB
-        value: thearchitect
-      - key: UPSTASH_REDIS_REST_URL
+      - key: REDIS_URL
         sync: false
-      - key: UPSTASH_REDIS_REST_TOKEN
+      - key: PINECONE_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
         sync: false
 
+  # ----------------------
+  # Widget (Prod)
+  # ----------------------
   - type: static
-    name: thearchitect-widget
+    name: thearchitect-widget-prod
     rootDir: client-widget
-    buildCommand: npm ci && npm run build:widget && npm run build:site
-    publishPath: build
+    buildCommand: npm run build:production
+    publishPath: dist
+    domains:
+      - widget.incharge-ai.com
+    envVars:
+      - key: VITE_API_BASE
+        value: https://api.incharge-ai.com/api
+
+  # ----------------------
+  # Widget (Staging)
+  # ----------------------
+  - type: static
+    name: thearchitect-widget-staging
+    rootDir: client-widget
+    buildCommand: npm run build:staging
+    publishPath: dist
+    domains:
+      - staging-widget.incharge-ai.com
+    envVars:
+      - key: VITE_API_BASE
+        value: https://staging-api.incharge-ai.com/api
+
+  # ----------------------
+  # Playground (Placeholder for later)
+  # ----------------------
+  # NOTE: This folder is missing in your repo. Once you add client-playground,
+  # uncomment these two blocks and deploy.
+  #
+  # - type: static
+  #   name: thearchitect-playground-prod
+  #   rootDir: client-playground
+  #   buildCommand: npm run build:production
+  #   publishPath: dist
+  #   domains:
+  #     - playground.incharge-ai.com
+  #   envVars:
+  #     - key: VITE_API_BASE
+  #       value: https://api.incharge-ai.com/api
+  #
+  # - type: static
+  #   name: thearchitect-playground-staging
+  #   rootDir: client-playground
+  #   buildCommand: npm run build:staging
+  #   publishPath: dist
+  #   domains:
+  #     - staging-playground.incharge-ai.com
+  #   envVars:
+  #     - key: VITE_API_BASE
+  #       value: https://staging-api.incharge-ai.com/api

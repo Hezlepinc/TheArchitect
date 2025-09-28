@@ -1,4 +1,4 @@
-﻿export let API_BASE = "";
+﻿export let API_BASE = (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_API_BASE) || "";
 export function setApiBase(base) {
   API_BASE = (base || "").replace(/\/$/, "");
 }
