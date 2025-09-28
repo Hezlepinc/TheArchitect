@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import ChatUI from "./components/ChatUI.jsx";
 import FeedbackPanel from "./components/FeedbackPanel.jsx";
+import FeedbackDashboard from "./components/FeedbackDashboard.jsx";
 
 export default function App() {
   const [sessionId] = useState(() => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`);
@@ -9,6 +10,7 @@ export default function App() {
   const [persona, setPersona] = useState("customer");
   const [messages, setMessages] = useState([]);
   const chatPairs = useMemo(() => messages.filter(m => m.role === "assistant").length, [messages]);
+  const [view, setView] = useState("chat");
 
   return (
     <div className="flex h-screen">
@@ -35,14 +37,22 @@ export default function App() {
             </select>
           </div>
         </div>
-        <ChatUI
-          sessionId={sessionId}
-          brand={brand}
-          region={region}
-          persona={persona}
-          messages={messages}
-          setMessages={setMessages}
-        />
+        <div className="p-2 flex gap-2">
+          <button className={`px-3 py-1 rounded ${view === "chat" ? "bg-blue-600 text-white" : "bg-gray-200"}`} onClick={() => setView("chat")}>Chat</button>
+          <button className={`px-3 py-1 rounded ${view === "dashboard" ? "bg-blue-600 text-white" : "bg-gray-200"}`} onClick={() => setView("dashboard")}>Feedback Dashboard</button>
+        </div>
+        {view === "chat" ? (
+          <ChatUI
+            sessionId={sessionId}
+            brand={brand}
+            region={region}
+            persona={persona}
+            messages={messages}
+            setMessages={setMessages}
+          />
+        ) : (
+          <FeedbackDashboard brand={brand} region={region} persona={persona} />
+        )}
       </div>
       <div className="w-96 p-4 bg-gray-100 overflow-y-auto">
         <FeedbackPanel
