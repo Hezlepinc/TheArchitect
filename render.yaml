@@ -30,9 +30,9 @@
   # ----------------------
   - type: static
     name: thearchitect-widget-prod
-    rootDir: client-widget
-    buildCommand: npm install && npm run build:production
-    publishPath: dist
+    rootDir: .
+    buildCommand: cd client-widget && npm install && npm run build:production
+    publishPath: client-widget/dist
     domains:
       - widget.incharge-ai.com
     envVars:
@@ -44,9 +44,9 @@
   # ----------------------
   - type: static
     name: thearchitect-playground-prod
-    rootDir: client-playground
-    buildCommand: npm install && npm run build:production
-    publishPath: dist
+    rootDir: .
+    buildCommand: cd client-playground && npm install && npm run build:production
+    publishPath: client-playground/dist
     domains:
       - playground.incharge-ai.com
     envVars:
