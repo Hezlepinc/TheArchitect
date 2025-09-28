@@ -1,11 +1,17 @@
 // client-playground/src/utils/api.js
 
-export async function sendMessageToAPI({ message, sessionId, brand, region, persona }) {
+export async function sendMessageToAPI(message, sessionId = "default-session") {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_BASE}/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId, message, brand, region, persona })
+      body: JSON.stringify({
+        sessionId,
+        message,
+        brand: "incharge",   // required by BodyWithRoutingSchema
+        region: "us-tx",     // required
+        persona: "customer"  // required
+      }),
     });
 
     if (!response.ok) {
@@ -13,11 +19,11 @@ export async function sendMessageToAPI({ message, sessionId, brand, region, pers
     }
 
     const data = await response.json();
-    return data.text || data.reply || "⚠️ No reply from assistant.";
+
+    // chatRouter returns { text, provider, via, rag }
+    return data.text || "⚠️ No reply from assistant.";
   } catch (err) {
     console.error("Error sending message:", err);
-    return "❌ Error contacting server";
+    return "⚠️ No reply received.";
   }
 }
-
-
