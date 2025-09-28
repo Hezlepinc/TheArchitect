@@ -11,6 +11,7 @@ const ChatBodySchema = z.object({
   sessionId: z.string().optional()
 });
 
+// Backward-compatible path-param route
 router.post("/:brand/:region/:persona", async (req, res) => {
   try {
     const { brand, region, persona } = req.params;
@@ -38,6 +39,42 @@ router.post("/:brand/:region/:persona", async (req, res) => {
     });
   } catch (err) {
     logger.error("ChatRouter error", { error: err?.message });
+    res.status(500).json({ error: "Chat processing failed" });
+  }
+});
+
+// JSON body route: POST /api/chat with { brand, region, persona, message, sessionId }
+const BodyWithRoutingSchema = ChatBodySchema.extend({
+  brand: z.string().trim().min(1),
+  region: z.string().trim().min(1),
+  persona: z.string().trim().min(1)
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const parse = BodyWithRoutingSchema.safeParse(req.body || {});
+    if (!parse.success) {
+      const issue = parse.error.issues?.[0];
+      const status = issue?.message === "message too long" ? 413 : 400;
+      return res.status(status).json({ error: issue?.message || "invalid payload" });
+    }
+    const { brand, region, persona, message } = parse.data;
+    let config;
+    try {
+      config = loadAssistantConfig(brand, region, persona);
+    } catch (e) {
+      logger.warn("Config not found", { brand, region, persona });
+      return res.status(404).json({ error: "assistant config not found" });
+    }
+    const result = await chatOrchestrator(message, config);
+    return res.json({
+      text: result.text,
+      provider: result.provider || "unknown",
+      via: result.via || "unknown",
+      rag: Boolean(result.rag)
+    });
+  } catch (err) {
+    logger.error("ChatRouter body route error", { error: err?.message });
     res.status(500).json({ error: "Chat processing failed" });
   }
 });

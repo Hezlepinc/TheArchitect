@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { sendMessageToAPI } from "../utils/api.js";
 
 export default function ChatUI({ sessionId, brand, region, persona, messages, setMessages }) {
   const [input, setInput] = useState("");
@@ -11,13 +12,7 @@ export default function ChatUI({ sessionId, brand, region, persona, messages, se
     setInput("");
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/chat/${brand}/${region}/${persona}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId, message: input })
-      });
-      const data = await res.json().catch(() => ({}));
-      const text = data?.text || data?.reply || "⚠️ No reply received";
+      const text = await sendMessageToAPI({ message: input, sessionId, brand, region, persona });
       setMessages((m) => [...m, { role: "assistant", content: text }]);
     } catch (err) {
       setMessages((m) => [...m, { role: "assistant", content: "❌ Error contacting server" }]);
