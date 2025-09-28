@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
-export default function ChatUI({ sessionId, brand, region, persona }) {
-  const [messages, setMessages] = useState([]);
+export default function ChatUI({ sessionId, brand, region, persona, messages, setMessages }) {
   const [input, setInput] = useState("");
 
   async function sendMessage() {
@@ -35,7 +34,13 @@ export default function ChatUI({ sessionId, brand, region, persona }) {
         ))}
       </div>
       <div className="p-2 border-t flex">
-        <input className="flex-1 border p-2 rounded mr-2" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Type a message..." />
+        <input
+          className="flex-1 border p-2 rounded mr-2"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+          placeholder="Type a message..."
+        />
         <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={sendMessage}>Send</button>
       </div>
     </div>

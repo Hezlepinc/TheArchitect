@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import ChatUI from "./components/ChatUI.jsx";
 import FeedbackPanel from "./components/FeedbackPanel.jsx";
 
@@ -7,6 +7,8 @@ export default function App() {
   const [brand, setBrand] = useState("incharge");
   const [region, setRegion] = useState("us-tx");
   const [persona, setPersona] = useState("customer");
+  const [messages, setMessages] = useState([]);
+  const chatPairs = useMemo(() => messages.filter(m => m.role === "assistant").length, [messages]);
 
   return (
     <div className="flex h-screen">
@@ -33,10 +35,24 @@ export default function App() {
             </select>
           </div>
         </div>
-        <ChatUI sessionId={sessionId} brand={brand} region={region} persona={persona} />
+        <ChatUI
+          sessionId={sessionId}
+          brand={brand}
+          region={region}
+          persona={persona}
+          messages={messages}
+          setMessages={setMessages}
+        />
       </div>
       <div className="w-96 p-4 bg-gray-100 overflow-y-auto">
-        <FeedbackPanel sessionId={sessionId} brand={brand} region={region} persona={persona} />
+        <FeedbackPanel
+          sessionId={sessionId}
+          brand={brand}
+          region={region}
+          persona={persona}
+          messages={messages}
+          chatPairs={chatPairs}
+        />
       </div>
     </div>
   );
