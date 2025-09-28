@@ -28,8 +28,9 @@
   # ----------------------
   # Widget (Prod)
   # ----------------------
-  - type: static
+  - type: web
     name: thearchitect-widget-prod
+    env: static
     rootDir: .
     buildCommand: cd client-widget && npm install && npm run build:production
     publishPath: client-widget/dist
@@ -42,8 +43,9 @@
   # ----------------------
   # Playground (Prod)
   # ----------------------
-  - type: static
+  - type: web
     name: thearchitect-playground-prod
+    env: static
     rootDir: .
     buildCommand: cd client-playground && npm install && npm run build:production
     publishPath: client-playground/dist
