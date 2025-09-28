@@ -19,6 +19,49 @@ const FeedbackBodySchema = z.object({
   charCount: z.number().int().nonnegative(),
 });
 
+// Accept JSON body with brand/persona (and optional region)
+const FeedbackBodyWithRoutingSchema = FeedbackBodySchema.extend({
+  brand: z.string().trim().min(1),
+  persona: z.string().trim().min(1),
+  region: z.string().trim().optional(),
+});
+
+router.post("/", async (req, res) => {
+  try {
+    if (!process.env.MONGODB_URI) {
+      return res.status(503).json({ error: "database not configured" });
+    }
+    const parsed = FeedbackBodyWithRoutingSchema.safeParse(req.body || {});
+    if (!parsed.success) {
+      const issue = parsed.error.issues?.[0];
+      return res.status(400).json({ error: issue?.message || "invalid payload" });
+    }
+    const { brand, region, persona } = parsed.data;
+    try {
+      region ? loadAssistantConfig(brand, region, persona) : loadAssistantConfig(brand, persona);
+    } catch {
+      return res.status(404).json({ error: "assistant config not found" });
+    }
+    const col = await getCollection("FeedbackLog");
+    const doc = {
+      brand,
+      region,
+      persona,
+      sessionId: parsed.data.sessionId,
+      conversationLength: parsed.data.conversationLength,
+      conversationTranscript: parsed.data.conversationTranscript,
+      feedback: parsed.data.feedback,
+      charCount: parsed.data.charCount,
+      createdAt: new Date(),
+    };
+    const result = await col.insertOne(doc);
+    return res.json({ ok: true, id: result.insertedId });
+  } catch (err) {
+    logger.error("Feedback save failed (body)", { error: err?.message });
+    res.status(500).json({ error: "Failed to save feedback" });
+  }
+});
+
 router.post("/:brand/:region/:persona", async (req, res) => {
   try {
     const { brand, region, persona } = req.params;
@@ -56,6 +99,42 @@ router.post("/:brand/:region/:persona", async (req, res) => {
     return res.json({ ok: true, id: result.insertedId });
   } catch (err) {
     logger.error("Feedback save failed", { error: err?.message });
+    res.status(500).json({ error: "Failed to save feedback" });
+  }
+});
+
+// Brand + persona without region
+router.post("/:brand/:persona", async (req, res) => {
+  try {
+    const { brand, persona } = req.params;
+    if (!process.env.MONGODB_URI) {
+      return res.status(503).json({ error: "database not configured" });
+    }
+    try {
+      loadAssistantConfig(brand, persona);
+    } catch {
+      return res.status(404).json({ error: "assistant config not found" });
+    }
+    const parsed = FeedbackBodySchema.safeParse(req.body || {});
+    if (!parsed.success) {
+      const issue = parsed.error.issues?.[0];
+      return res.status(400).json({ error: issue?.message || "invalid payload" });
+    }
+    const col = await getCollection("FeedbackLog");
+    const doc = {
+      brand,
+      persona,
+      sessionId: parsed.data.sessionId,
+      conversationLength: parsed.data.conversationLength,
+      conversationTranscript: parsed.data.conversationTranscript,
+      feedback: parsed.data.feedback,
+      charCount: parsed.data.charCount,
+      createdAt: new Date(),
+    };
+    const result = await col.insertOne(doc);
+    return res.json({ ok: true, id: result.insertedId });
+  } catch (err) {
+    logger.error("Feedback save failed (brand+persona)", { error: err?.message });
     res.status(500).json({ error: "Failed to save feedback" });
   }
 });

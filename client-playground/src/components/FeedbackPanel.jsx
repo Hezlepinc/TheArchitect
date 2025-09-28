@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 
-export default function FeedbackPanel({ sessionId, brand, region, persona, messages, chatPairs }) {
+export default function FeedbackPanel({ sessionId, brand, region, persona, messages, chatPairs, onSubmitted }) {
   const [feedback, setFeedback] = useState("");
   const minPairs = 10;
   const minChars = 150;
@@ -10,13 +10,14 @@ export default function FeedbackPanel({ sessionId, brand, region, persona, messa
 
   async function submitFeedback() {
     if (!canSubmit) return;
-    await fetch(`${import.meta.env.VITE_API_BASE}/feedback/${brand}/${region}/${persona}`, {
+    await fetch(`${import.meta.env.VITE_API_BASE}/feedback`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId, conversationLength: transcript.length, conversationTranscript: transcript, feedback: feedback.trim(), charCount: chars })
+      body: JSON.stringify({ brand, region, persona, sessionId, conversationLength: transcript.length, conversationTranscript: transcript, feedback: feedback.trim(), charCount: chars })
     });
     setFeedback("");
     alert("✅ Feedback submitted!");
+    if (onSubmitted) onSubmitted();
   }
 
   return (

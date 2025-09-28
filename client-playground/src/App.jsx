@@ -62,6 +62,7 @@ export default function App() {
           persona={persona}
           messages={messages}
           chatPairs={chatPairs}
+          onSubmitted={() => { setMessages([]); }}
         />
       </div>
     </div>
