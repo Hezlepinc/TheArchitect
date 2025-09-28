@@ -3,13 +3,13 @@ export function setApiBase(base) {
   API_BASE = (base || "").replace(/\/$/, "");
 }
 
-export async function sendMessage(brand, region, persona, message) {
+export async function sendMessage(brand, region, persona, message, sessionId) {
   const res = await fetch(
     `${API_BASE}/api/chat/${brand}/${region}/${persona}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({ message, sessionId })
     }
   );
   return res.json();

@@ -1,6 +1,16 @@
 ﻿import React, { useEffect, useRef, useState } from "react";
 import { sendMessage, getAssistantConfig } from "../utils/api.js";
 
+function getOrCreateSessionId(brand) {
+  const key = `ARCH_SESSION:${(brand || "").toLowerCase()}`;
+  let v = localStorage.getItem(key);
+  if (!v) {
+    v = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+    localStorage.setItem(key, v);
+  }
+  return v;
+}
+
 export default function ChatWidget({ brand, region, persona, floating = true }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -10,6 +20,11 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
   const [unread, setUnread] = useState(0);
   const messagesRef = useRef(null);
   const prevLenRef = useRef(0);
+  const sessionIdRef = useRef(null);
+
+  useEffect(() => {
+    sessionIdRef.current = getOrCreateSessionId(brand);
+  }, [brand]);
 
   useEffect(() => {
     let cancelled = false;
@@ -49,7 +64,7 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
     setMessages((prev) => [...prev, { sender: "user", text: trimmed }]);
     setIsTyping(true);
     try {
-      const res = await sendMessage(brand, region, persona, trimmed);
+      const res = await sendMessage(brand, region, persona, trimmed, sessionIdRef.current);
       setMessages((prev) => [...prev, { sender: "ai", text: res.text }]);
     } finally { setIsTyping(false); }
   };
@@ -60,13 +75,6 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
 
   const themeVars = config?.themeColor ? { "--brand-color": config.themeColor } : {};
   const containerClass = `chat-widget${floating ? " floating" : ""}`;
-
-  const actions = [
-    config?.scheduleUrl ? { label: "Schedule", url: config.scheduleUrl } : null,
-    config?.ctaUrl ? { label: "Contact", url: config.ctaUrl } : null,
-    config?.reviewUrl ? { label: "Reviews", url: config.reviewUrl, target: "_blank" } : null,
-    config?.textUrl ? { label: "Text", url: config.textUrl } : null
-  ].filter(Boolean);
 
   if (!isOpen) {
     return (
@@ -90,11 +98,12 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
         <button className="chat-minimize" onClick={() => setIsOpen(false)} aria-label="Minimize chat">â€“</button>
       </div>
 
-      {actions.length > 0 && (
+      {config && (config.scheduleUrl || config.ctaUrl || config.reviewUrl || config.textUrl) && (
         <div className="chat-actions">
-          {actions.map((a, i) => (
-            <a key={i} href={a.url} target={a.target || "_self"} rel="noopener noreferrer">{a.label}</a>
-          ))}
+          {config.scheduleUrl && (<a href={config.scheduleUrl}>Schedule</a>)}
+          {config.ctaUrl && (<a href={config.ctaUrl}>Contact</a>)}
+          {config.reviewUrl && (<a href={config.reviewUrl} target="_blank" rel="noopener noreferrer">Reviews</a>)}
+          {config.textUrl && (<a href={config.textUrl}>Text</a>)}
         </div>
       )}
 

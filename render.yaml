@@ -1,0 +1,32 @@
+﻿services:
+  - type: web
+    name: thearchitect-api
+    env: node
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: node ./index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: CORS_ORIGIN
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DB
+        value: thearchitect
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
+
+  - type: static
+    name: thearchitect-widget
+    rootDir: client-widget
+    buildCommand: npm ci && npm run build:widget && npm run build:site
+    publishPath: client-widget/build

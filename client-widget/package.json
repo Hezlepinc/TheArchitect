@@ -10,7 +10,8 @@
                     "build:widget":  "vite build",
                     "preview:demo":  "npx serve demo -l 8080",
                     "preview:playgrounds":  "npx serve playgrounds -l 8081",
-                    "preview:public":  "npx serve public -l 8082"
+                    "preview:public":  "npx serve public -l 8082",
+                    "build:site":  "node ./scripts/buildSite.mjs"
                 },
     "dependencies":  {
                          "clsx":  "^2.1.1",
