@@ -31,9 +31,8 @@
   - type: web
     name: thearchitect-widget-prod
     env: static
-    rootDir: .
     buildCommand: cd client-widget && npm install && npm run build:production
-    publishPath: client-widget/dist
+    staticPublishPath: client-widget/dist
     domains:
       - widget.incharge-ai.com
     envVars:
@@ -46,9 +45,8 @@
   - type: web
     name: thearchitect-playground-prod
     env: static
-    rootDir: .
     buildCommand: cd client-playground && npm install && npm run build:production
-    publishPath: client-playground/dist
+    staticPublishPath: client-playground/dist
     domains:
       - playground.incharge-ai.com
     envVars:
