@@ -1,0 +1,19 @@
+﻿{
+    "assistantName":  "Sparky",
+    "brand":  "InCharge",
+    "region":  "us-tx",
+    "persona":  "customer",
+    "greeting":  "Welcome to In Charge Electric. How can I help you today?",
+    "themeColor":  "#0056b3",
+    "logoUrl":  "https://cdn.inchargeelectricalservices.com/wp-content/uploads/2024/03/06163753/in-charge-logo-edited-793x128.png",
+    "reviewUrl":  "https://g.page/r/CXblPE9RcTcEEBM/review",
+    "scheduleUrl":  "https://inchargeelectricalservices.com/request-quote/",
+    "contactInfo":  {
+                        "email":  "info@inchargeelectricalservices.com",
+                        "textPhone":  "(407) 473-2952",
+                        "phone":  "(512) 778-6240",
+                        "altPhone":  "(888) 830-4237"
+                    },
+    "ctaUrl":  "https://inchargeelectricalservices.com/contact/",
+    "textUrl":  "sms:+14074732952"
+}

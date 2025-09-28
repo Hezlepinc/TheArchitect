@@ -1,0 +1,21 @@
+﻿### Lenhart - Get Widget Config (us-fl customer)
+GET http://localhost:3000/api/widget-config/lenhart/us-fl/customer
+
+### Lenhart - Get Widget Config (us-sc customer)
+GET http://localhost:3000/api/widget-config/lenhart/us-sc/customer
+
+### Lenhart - Chat (us-fl customer)
+POST http://localhost:3000/api/chat/lenhart/us-fl/customer
+Content-Type: application/json
+
+{
+  "message": "What electrical services do you offer?"
+}
+
+### Lenhart - Chat (us-sc customer)
+POST http://localhost:3000/api/chat/lenhart/us-sc/customer
+Content-Type: application/json
+
+{
+  "message": "Do you provide EV charger installation?"
+}

@@ -1,0 +1,34 @@
+{
+    "name": "thearchitect",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "generate:sitemap": "node ./scripts/generateSitemap.mjs",
+        "dev": "nodemon --watch server --ext js,json --exec node ./server/index.js",
+        "test:api": "node ./scripts/runApiChecks.mjs",
+        "start": "node ./server/index.js"
+    },
+    "dependencies": {
+        "class-variance-authority": "^0.7.1",
+        "cors": "^2.8.5",
+        "dotenvy": "^0.2.0",
+        "express": "^4.21.2",
+        "lucide-react": "^0.544.0",
+        "tailwindcss": "^4.1.13",
+        "zod": "^3.25.76"
+    },
+    "version": "1.0.0",
+    "description": "Multi-tenant AI Assistant Platform for managing **multi-brand, multi-location, multi-persona** assistants.",
+    "main": "index.js",
+    "directories": {
+        "doc": "docs",
+        "test": "tests"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "nodemon": "^3.1.10",
+        "shadcn-ui": "^0.9.5"
+    }
+}

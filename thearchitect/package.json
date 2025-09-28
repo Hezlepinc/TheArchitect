@@ -1,1 +1,0 @@
-{"name":"thearchitect","private":true,"type":"module","scripts":{"generate:sitemap":"node ./scripts/generateSitemap.mjs"}}

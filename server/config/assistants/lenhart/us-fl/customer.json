@@ -1,0 +1,19 @@
+﻿{
+    "assistantName":  "Sparky",
+    "brand":  "Lenhart",
+    "region":  "us-fl",
+    "persona":  "customer",
+    "greeting":  "Welcome to Lenhart Electric. How can I help you today?",
+    "themeColor":  "#004080",
+    "logoUrl":  "https://cdn.inchargeelectricalservices.com/wp-content/uploads/sites/3/2024/01/06170112/lenhart-white-edited-2-473x128.png",
+    "reviewUrl":  "https://g.page/r/CRrsIGBZcZmSEBM/review",
+    "scheduleUrl":  "https://lenhartelectric.setmore.com/",
+    "contactInfo":  {
+                        "email":  "custsvclen@lenhartelectric.com",
+                        "textPhone":  "(407) 473-2952",
+                        "phone":  "(352) 748-5818",
+                        "altPhone":  "(352) 758-5818"
+                    },
+    "ctaUrl":  "https://lenhartelectric.com/contact/",
+    "textUrl":  "sms:+14074732952"
+}

@@ -1,0 +1,13 @@
+﻿{
+  "watch": ["server"],
+  "ext": "js,json",
+  "exec": "node ./server/index.js",
+  "ignore": [
+    "client-widget/**",
+    "docs/**",
+    "tests/**",
+    "scripts/**",
+    "node_modules/**",
+    "**/*.md"
+  ]
+}

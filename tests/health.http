@@ -1,0 +1,22 @@
+﻿### Health
+GET http://localhost:3000/health
+
+### InCharge Health Check (config + chat quick)
+GET http://localhost:3000/api/widget-config/incharge/us-tx/customer
+
+POST http://localhost:3000/api/chat/incharge/us-tx/customer
+Content-Type: application/json
+
+{
+  "message": "Hello"
+}
+
+### Lenhart Health Check (config + chat quick)
+GET http://localhost:3000/api/widget-config/lenhart/us-fl/customer
+
+POST http://localhost:3000/api/chat/lenhart/us-fl/customer
+Content-Type: application/json
+
+{
+  "message": "Hello"
+}

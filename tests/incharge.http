@@ -1,0 +1,21 @@
+﻿### InCharge - Get Widget Config (us-tx customer)
+GET http://localhost:3000/api/widget-config/incharge/us-tx/customer
+
+### InCharge - Get Widget Config (us-tx internal)
+GET http://localhost:3000/api/widget-config/incharge/us-tx/internal
+
+### InCharge - Chat (us-tx customer)
+POST http://localhost:3000/api/chat/incharge/us-tx/customer
+Content-Type: application/json
+
+{
+  "message": "Do you install backup generators?"
+}
+
+### InCharge - Chat (us-tx internal)
+POST http://localhost:3000/api/chat/incharge/us-tx/internal
+Content-Type: application/json
+
+{
+  "message": "What is today's jobs summary?"
+}
