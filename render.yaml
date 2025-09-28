@@ -31,7 +31,7 @@
   - type: static
     name: thearchitect-widget-prod
     rootDir: client-widget
-    buildCommand: npm run build:production
+    buildCommand: npm install && npm run build:production
     publishPath: dist
     domains:
       - widget.incharge-ai.com
@@ -45,7 +45,7 @@
   - type: static
     name: thearchitect-playground-prod
     rootDir: client-playground
-    buildCommand: npm run build:production
+    buildCommand: npm install && npm run build:production
     publishPath: dist
     domains:
       - playground.incharge-ai.com
