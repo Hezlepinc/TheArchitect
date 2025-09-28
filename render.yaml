@@ -80,29 +80,29 @@
         value: https://staging-api.incharge-ai.com/api
 
   # ----------------------
-  # Playground (Placeholder for later)
+  # Playground (Prod)
   # ----------------------
-  # NOTE: This folder is missing in your repo. Once you add client-playground,
-  # uncomment these two blocks and deploy.
-  #
-  # - type: static
-  #   name: thearchitect-playground-prod
-  #   rootDir: client-playground
-  #   buildCommand: npm run build:production
-  #   publishPath: dist
-  #   domains:
-  #     - playground.incharge-ai.com
-  #   envVars:
-  #     - key: VITE_API_BASE
-  #       value: https://api.incharge-ai.com/api
-  #
-  # - type: static
-  #   name: thearchitect-playground-staging
-  #   rootDir: client-playground
-  #   buildCommand: npm run build:staging
-  #   publishPath: dist
-  #   domains:
-  #     - staging-playground.incharge-ai.com
-  #   envVars:
-  #     - key: VITE_API_BASE
-  #       value: https://staging-api.incharge-ai.com/api
+  - type: static
+    name: thearchitect-playground-prod
+    rootDir: client-playground
+    buildCommand: npm run build:production
+    publishPath: dist
+    domains:
+      - playground.incharge-ai.com
+    envVars:
+      - key: VITE_API_BASE
+        value: https://api.incharge-ai.com/api
+
+  # ----------------------
+  # Playground (Staging)
+  # ----------------------
+  - type: static
+    name: thearchitect-playground-staging
+    rootDir: client-playground
+    buildCommand: npm run build:staging
+    publishPath: dist
+    domains:
+      - staging-playground.incharge-ai.com
+    envVars:
+      - key: VITE_API_BASE
+        value: https://staging-api.incharge-ai.com/api
