@@ -1,17 +1,11 @@
 // client-playground/src/utils/api.js
 
-export async function sendMessageToAPI(message, sessionId = "default-session") {
+export async function sendMessageToAPI(message, brand = "incharge", persona = "customer", sessionId = "default-session") {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_BASE}/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sessionId,
-        message,
-        brand: "incharge",   // required by BodyWithRoutingSchema
-        region: "us-tx",     // required
-        persona: "customer"  // required
-      }),
+      body: JSON.stringify({ sessionId, message, brand, persona }),
     });
 
     if (!response.ok) {

@@ -5,7 +5,7 @@ import { z } from "zod";
 const AssistantConfigSchema = z.object({
   assistantName: z.string().min(1),
   brand: z.string().min(1),
-  region: z.string().min(1),
+  region: z.string().min(1).optional(),
   persona: z.string().min(1),
   greeting: z.string().min(1),
   themeColor: z.string().min(1),
@@ -25,13 +25,31 @@ const AssistantConfigSchema = z.object({
     .optional()
 });
 
-export function loadAssistantConfig(brand, region, persona) {
-  const configPath = path.resolve(
-    "server/config/assistants",
-    brand,
-    region,
-    `${persona}.json`
-  );
+function resolveConfigPath(brand, region, persona) {
+  const root = path.resolve("server/config/assistants", brand);
+  if (region) {
+    return path.join(root, region, `${persona}.json`);
+  }
+  // Fallback: brand/persona.json (no region) OR first region folder that contains persona.json
+  const direct = path.join(root, `${persona}.json`);
+  if (fs.existsSync(direct)) return direct;
+  const entries = fs.existsSync(root) ? fs.readdirSync(root, { withFileTypes: true }) : [];
+  for (const e of entries) {
+    if (e.isDirectory()) {
+      const p = path.join(root, e.name, `${persona}.json`);
+      if (fs.existsSync(p)) return p;
+    }
+  }
+  return path.join(root, "__not_found__", `${persona}.json`);
+}
+
+export function loadAssistantConfig(brand, regionOrPersona, maybePersona) {
+  // Support both signatures: (brand, region, persona) and (brand, persona)
+  const hasRegion = typeof maybePersona === "string";
+  const brandId = String(brand);
+  const region = hasRegion ? String(regionOrPersona) : undefined;
+  const persona = hasRegion ? String(maybePersona) : String(regionOrPersona);
+  const configPath = resolveConfigPath(brandId, region, persona);
   if (!fs.existsSync(configPath)) {
     throw new Error(`Config not found: ${configPath}`);
   }

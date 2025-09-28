@@ -17,7 +17,7 @@ export default function FeedbackDashboard({ brand, region, persona }) {
         if (persona) params.set("persona", persona);
         params.set("limit", "50");
         const url = `${import.meta.env.VITE_API_BASE}/feedback/list?${params.toString()}`;
-        const res = await fetch(url);
+        const res = await fetch(url, { headers: { "x-admin-key": import.meta.env.VITE_ADMIN_KEY || "" } });
         const data = await res.json().catch(() => ({}));
         if (!cancelled) setItems(Array.isArray(data.items) ? data.items : []);
       } catch (e) {

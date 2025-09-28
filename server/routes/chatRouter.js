@@ -11,8 +11,8 @@ const ChatBodySchema = z.object({
   sessionId: z.string().optional()
 });
 
-// Backward-compatible path-param route
-router.post("/:brand/:region/:persona", async (req, res) => {
+// Backward-compatible path-param route (supports optional region in future)
+router.post("/:brand/:region?/:persona", async (req, res) => {
   try {
     const { brand, region, persona } = req.params;
     const parse = ChatBodySchema.safeParse(req.body || {});
@@ -24,7 +24,8 @@ router.post("/:brand/:region/:persona", async (req, res) => {
 
     let config;
     try {
-      config = loadAssistantConfig(brand, region, persona);
+      // Support both (brand, region, persona) and (brand, persona)
+      config = region ? loadAssistantConfig(brand, region, persona) : loadAssistantConfig(brand, persona);
     } catch (e) {
       logger.warn("Config not found", { brand, region, persona });
       return res.status(404).json({ error: "assistant config not found" });
@@ -46,7 +47,7 @@ router.post("/:brand/:region/:persona", async (req, res) => {
 // JSON body route: POST /api/chat with { brand, region, persona, message, sessionId }
 const BodyWithRoutingSchema = ChatBodySchema.extend({
   brand: z.string().trim().min(1),
-  region: z.string().trim().min(1),
+  region: z.string().trim().optional(),
   persona: z.string().trim().min(1)
 });
 
@@ -61,7 +62,7 @@ router.post("/", async (req, res) => {
     const { brand, region, persona, message } = parse.data;
     let config;
     try {
-      config = loadAssistantConfig(brand, region, persona);
+      config = region ? loadAssistantConfig(brand, region, persona) : loadAssistantConfig(brand, persona);
     } catch (e) {
       logger.warn("Config not found", { brand, region, persona });
       return res.status(404).json({ error: "assistant config not found" });

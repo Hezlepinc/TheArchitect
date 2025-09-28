@@ -63,6 +63,10 @@ router.post("/:brand/:region/:persona", async (req, res) => {
 // Minimal admin listing for future dashboard (optional for now)
 router.get("/list", async (req, res) => {
   try {
+    const adminKey = req.headers["x-admin-key"];
+    if (process.env.ADMIN_KEY && adminKey !== process.env.ADMIN_KEY) {
+      return res.status(403).json({ error: "forbidden" });
+    }
     const { brand, region, persona, limit } = req.query;
     const q = {};
     if (brand) q.brand = String(brand);

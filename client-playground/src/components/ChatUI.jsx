@@ -12,7 +12,7 @@ export default function ChatUI({ sessionId, brand, region, persona, messages, se
     setInput("");
 
     try {
-      const text = await sendMessageToAPI(input, sessionId);
+      const text = await sendMessageToAPI(input, brand, persona, sessionId);
       setMessages((m) => [...m, { role: "assistant", content: text }]);
     } catch (err) {
       setMessages((m) => [...m, { role: "assistant", content: "❌ Error contacting server" }]);
