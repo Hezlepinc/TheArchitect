@@ -25,7 +25,8 @@ export default function FeedbackPanel({ sessionId, brand, persona, messages, cha
       <h2 className="text-lg font-bold mb-2">Feedback</h2>
       <div className="text-sm text-gray-600 mb-1">Chats: {Math.min(chatPairs, minPairs)} / {minPairs}</div>
       <div className="w-full h-1 bg-gray-200 rounded mb-2"><div className="h-1 bg-blue-500 rounded" style={{ width: `${Math.min(100, (chatPairs / minPairs) * 100)}%` }} /></div>
-      <textarea className="w-full border rounded p-2 mb-1" rows="5" value={feedback} onChange={(e) => setFeedback(e.target.value)} placeholder="What worked well? What needs improvement?" />
+      <label htmlFor="feedback-textarea" className="sr-only">Feedback</label>
+      <textarea id="feedback-textarea" name="feedback" className="w-full border rounded p-2 mb-1" rows="5" value={feedback} onChange={(e) => setFeedback(e.target.value)} placeholder="What worked well? What needs improvement?" />
       <div className="text-sm text-gray-600 mb-2">Feedback: {Math.min(chars, minChars)} / {minChars} chars</div>
       <button className={`px-4 py-2 rounded ${canSubmit ? "bg-green-600 text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`} disabled={!canSubmit} onClick={submitFeedback}>Submit</button>
     </div>

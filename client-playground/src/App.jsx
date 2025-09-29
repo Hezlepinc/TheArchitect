@@ -16,15 +16,15 @@ export default function App() {
       <div className="flex-1 border-r flex flex-col">
         <div className="p-2 border-b bg-gray-100 flex gap-4 items-center">
           <div>
-            <label className="text-sm font-medium mr-1">Brand:</label>
-            <select className="border rounded px-2 py-1" value={brand} onChange={(e) => setBrand(e.target.value)}>
+            <label className="text-sm font-medium mr-1" htmlFor="brand-select">Brand:</label>
+            <select id="brand-select" name="brand" className="border rounded px-2 py-1" value={brand} onChange={(e) => setBrand(e.target.value)}>
               <option value="incharge">InCharge</option>
               <option value="lenhart">Lenhart</option>
             </select>
           </div>
           <div>
-            <label className="text-sm font-medium mr-1">Persona:</label>
-            <select className="border rounded px-2 py-1" value={persona} onChange={(e) => setPersona(e.target.value)}>
+            <label className="text-sm font-medium mr-1" htmlFor="persona-select">Persona:</label>
+            <select id="persona-select" name="persona" className="border rounded px-2 py-1" value={persona} onChange={(e) => setPersona(e.target.value)}>
               <option value="customer">Customer</option>
             </select>
           </div>

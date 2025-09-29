@@ -29,7 +29,10 @@ export default function ChatUI({ sessionId, brand, persona, messages, setMessage
         ))}
       </div>
       <div className="p-2 border-t flex">
+        <label htmlFor="chat-input" className="sr-only">Message</label>
         <input
+          id="chat-input"
+          name="message"
           className="flex-1 border p-2 rounded mr-2"
           value={input}
           onChange={(e) => setInput(e.target.value)}
