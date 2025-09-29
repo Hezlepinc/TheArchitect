@@ -70,7 +70,7 @@ function buildSystemPrompt(cfg) {
   lines.push(`Region: ${cfg.region}`);
   lines.push(`Persona: ${cfg.persona}`);
   if (cfg.greeting) {
-    lines.push(`Greeting: "${cfg.greeting}"`);
+    lines.push(`Greeting (UI only, do not include in replies): "${cfg.greeting}"`);
   }
   lines.push("");
 
@@ -87,6 +87,7 @@ function buildSystemPrompt(cfg) {
   lines.push("- Prefer bullet points for steps or lists");
   lines.push("- Keep replies short unless user asks for detail");
   lines.push("- If context snippets are provided, ground answers in them");
+  lines.push("- Do NOT repeat or restate the greeting; answer the user's request directly");
 
   return lines.join("\n");
 }
