@@ -69,6 +69,7 @@ async function pingAnthropic() {
 // -----------------
 import chatRouter from "./routes/chatRouter.js";
 import widgetConfigRouter from "./routes/widgetConfigRouter.js";
+import feedbackDashboard from "./routes/feedbackDashboard.js";
 import feedbackRouter from "./routes/feedbackRouter.js";
 
 const app = express();
@@ -85,6 +86,7 @@ app.use((req, _res, next) => {
 app.use("/api/chat", chatRouter);
 app.use("/api/widget-config", widgetConfigRouter);
 app.use("/api/feedback", feedbackRouter);
+app.use("/feedback-dashboard", feedbackDashboard);
 
 // -----------------
 // Health endpoints

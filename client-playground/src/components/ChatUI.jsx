@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { sendMessageToAPI } from "../utils/api.js";
 
-export default function ChatUI({ sessionId, brand, region, persona, messages, setMessages }) {
+export default function ChatUI({ sessionId, brand, persona, messages, setMessages }) {
   const [input, setInput] = useState("");
 
   async function sendMessage() {

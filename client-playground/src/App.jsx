@@ -6,7 +6,6 @@ import FeedbackDashboard from "./components/FeedbackDashboard.jsx";
 export default function App() {
   const [sessionId] = useState(() => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`);
   const [brand, setBrand] = useState("incharge");
-  const [region, setRegion] = useState("us-tx");
   const [persona, setPersona] = useState("customer");
   const [messages, setMessages] = useState([]);
   const chatPairs = useMemo(() => messages.filter(m => m.role === "assistant").length, [messages]);
@@ -24,13 +23,6 @@ export default function App() {
             </select>
           </div>
           <div>
-            <label className="text-sm font-medium mr-1">Region:</label>
-            <select className="border rounded px-2 py-1" value={region} onChange={(e) => setRegion(e.target.value)}>
-              <option value="us-tx">US-TX</option>
-              <option value="us-fl">US-FL</option>
-            </select>
-          </div>
-          <div>
             <label className="text-sm font-medium mr-1">Persona:</label>
             <select className="border rounded px-2 py-1" value={persona} onChange={(e) => setPersona(e.target.value)}>
               <option value="customer">Customer</option>
@@ -45,20 +37,18 @@ export default function App() {
           <ChatUI
             sessionId={sessionId}
             brand={brand}
-            region={region}
             persona={persona}
             messages={messages}
             setMessages={setMessages}
           />
         ) : (
-          <FeedbackDashboard brand={brand} region={region} persona={persona} />
+          <FeedbackDashboard brand={brand} persona={persona} />
         )}
       </div>
       <div className="w-96 p-4 bg-gray-100 overflow-y-auto">
         <FeedbackPanel
           sessionId={sessionId}
           brand={brand}
-          region={region}
           persona={persona}
           messages={messages}
           chatPairs={chatPairs}

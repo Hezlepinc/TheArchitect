@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-export default function FeedbackDashboard({ brand, region, persona }) {
+export default function FeedbackDashboard({ brand, persona }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -13,7 +13,6 @@ export default function FeedbackDashboard({ brand, region, persona }) {
       try {
         const params = new URLSearchParams();
         if (brand) params.set("brand", brand);
-        if (region) params.set("region", region);
         if (persona) params.set("persona", persona);
         params.set("limit", "50");
         const url = `${import.meta.env.VITE_API_BASE}/feedback/list?${params.toString()}`;
