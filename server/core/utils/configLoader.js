@@ -26,7 +26,8 @@ const AssistantConfigSchema = z.object({
 });
 
 function resolveConfigPath(brand, region, persona) {
-  const root = path.resolve("server/config/assistants", brand);
+  // Resolve relative to the running server directory
+  const root = path.resolve(process.cwd(), "config/assistants", brand);
   if (region) {
     return path.join(root, region, `${persona}.json`);
   }
