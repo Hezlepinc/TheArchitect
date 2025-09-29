@@ -27,7 +27,7 @@ export default function FeedbackDashboard({ brand, persona }) {
     }
     load();
     return () => { cancelled = true; };
-  }, [brand, region, persona]);
+  }, [brand, persona]);
 
   if (loading) return <div className="p-4">Loading…</div>;
   if (error) return <div className="p-4 text-red-600">{error}</div>;
@@ -43,7 +43,7 @@ export default function FeedbackDashboard({ brand, persona }) {
             <li key={fb._id || `${fb.sessionId}-${fb.createdAt}`} className="border rounded p-3 bg-white">
               <div className="text-gray-900 whitespace-pre-wrap">{fb.feedback}</div>
               <div className="flex justify-between text-xs text-gray-500 mt-2">
-                <span>Brand: {fb.brand} · Region: {fb.region} · Persona: {fb.persona}</span>
+                <span>Brand: {fb.brand} · Persona: {fb.persona}</span>
                 <span>Len: {fb.conversationLength} · Chars: {fb.charCount}</span>
                 <span>{fb.createdAt ? new Date(fb.createdAt).toLocaleString() : ""}</span>
               </div>
