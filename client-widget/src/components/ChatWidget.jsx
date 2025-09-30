@@ -96,15 +96,16 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
     <div className={containerClass} style={themeVars}>
       <div className="chat-header gradient">
         <div className="header-main">
-          <div className="header-text">
-            <div className="chat-title">{config?.assistantName || "Assistant"}</div>
-            <div className="chat-subtitle">{config?.subtitle || "We typically reply in a few minutes."}</div>
+          <div className="header-left">
+            <span className="info-bubble" aria-hidden="true">i</span>
+            <div className="header-text">
+              <div className="chat-title">{config?.assistantName || "Assistant"}</div>
+              <div className="chat-subtitle">{config?.subtitle || "We typically reply in a few minutes."}</div>
+              <div className="chat-byline">AI by {config?.brand || "Your Brand"}</div>
+            </div>
           </div>
           <button className="chat-minimize" onClick={() => setIsOpen(false)} aria-label="Minimize chat">-</button>
         </div>
-        {config?.logoUrl && (
-          <img className="chat-avatar" src={config.logoUrl} alt={config.brand || config.assistantName || "Brand"} />
-        )}
       </div>
 
       <div className="messages" ref={messagesRef} aria-live="polite" aria-atomic="false">
@@ -137,12 +138,9 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
         <button onClick={handleSend}>Send</button>
       </div>
 
-      {config && (config.scheduleUrl || config.ctaUrl || config.reviewUrl || config.textUrl) && (
-        <div className="chat-footer-actions">
-          {config.scheduleUrl && (<a href={config.scheduleUrl}>Schedule</a>)}
-          {config.ctaUrl && (<a href={config.ctaUrl}>Contact</a>)}
-          {config.reviewUrl && (<a href={config.reviewUrl} target="_blank" rel="noopener noreferrer">Reviews</a>)}
-          {config.textUrl && (<a href={config.textUrl}>Text</a>)}
+      {config?.scheduleUrl && (
+        <div className="chat-footer-cta">
+          <a className="cta-primary" href={config.scheduleUrl}>Schedule</a>
         </div>
       )}
 
