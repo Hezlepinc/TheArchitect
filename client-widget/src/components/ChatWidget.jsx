@@ -110,8 +110,8 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
   }
 
   return (
-    <div className={containerClass} style={themeVars}>
-      <div className="chat-header gradient full-bleed">
+    <div className={containerClass} style={themeVars} data-brand={brand} data-region={region} data-persona={persona}>
+      <div className="chat-header gradient">
         <div className="header-main">
           <div className="header-left">
             <span className="info-bubble large" aria-hidden="true">i</span>

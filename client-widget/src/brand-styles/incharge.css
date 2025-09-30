@@ -1,0 +1,10 @@
+/* InCharge brand-specific tweaks */
+:root { --brand-color: #0056b3; }
+.chat-widget[data-brand="incharge"] {
+  border-radius: 12px;
+}
+
+.chat-widget[data-brand="incharge"] .bubble {
+  border-radius: 16px;
+}
+

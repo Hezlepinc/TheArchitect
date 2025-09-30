@@ -1,0 +1,15 @@
+/* Lenhart brand-specific tweaks */
+:root { --brand-color: #004080; }
+.chat-widget[data-brand="lenhart"] {
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(17,24,39,0.10);
+}
+
+.chat-widget[data-brand="lenhart"] .bubble {
+  border-radius: 18px;
+}
+
+.chat-widget[data-brand="lenhart"] .quick-replies button:hover {
+  background: rgba(17, 94, 89, 0.08); /* subtle teal-ish accent */
+}
+
