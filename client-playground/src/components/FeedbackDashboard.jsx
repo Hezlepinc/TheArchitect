@@ -12,10 +12,14 @@ export default function FeedbackDashboard({ brand, persona }) {
       setError("");
       try {
         const params = new URLSearchParams();
+        // Inline assumption for region mapping in playground view only
+        const brandToRegion = { incharge: "us-tx", lenhart: "us-fl" };
+        const region = brandToRegion[String(brand).toLowerCase()] || "us-tx";
         if (brand) params.set("brand", brand);
+        if (region) params.set("region", region);
         if (persona) params.set("persona", persona);
         params.set("limit", "50");
-        const url = `${import.meta.env.VITE_API_BASE}/feedback/list?${params.toString()}`;
+        const url = `${import.meta.env.VITE_API_BASE}/api/feedback/list?${params.toString()}`;
         const res = await fetch(url, { headers: { "x-admin-key": import.meta.env.VITE_ADMIN_KEY || "" } });
         const data = await res.json().catch(() => ({}));
         if (!cancelled) setItems(Array.isArray(data.items) ? data.items : []);

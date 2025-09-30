@@ -10,7 +10,8 @@ export default function FeedbackPanel({ brand, region, persona, sessionId, conve
   const [showModal, setShowModal] = useState(false);
 
   const turns = Array.isArray(conversation) ? conversation.length : 0;
-  const minTurns = 10;
+  // Testing-only: reduce to 2 to enable faster feedback cycles during QA
+  const minTurns = 2;
   const minChars = 100; // can be tuned 100-150
   const maxChars = 1000;
   const remaining = Math.max(0, maxChars - feedback.length);

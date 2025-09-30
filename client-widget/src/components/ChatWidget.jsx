@@ -1,6 +1,5 @@
 ﻿import React, { useEffect, useRef, useState } from "react";
 import { sendMessage, getAssistantConfig } from "../utils/api.js";
-import FeedbackPanel from "./FeedbackPanel.jsx";
 
 function getOrCreateSessionId(brand) {
   const key = `ARCH_SESSION:${(brand || "").toLowerCase()}`;
@@ -22,7 +21,6 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
   const messagesRef = useRef(null);
   const prevLenRef = useRef(0);
   const sessionIdRef = useRef(null);
-  const minTurns = 10;
 
   useEffect(() => {
     sessionIdRef.current = getOrCreateSessionId(brand);
@@ -123,21 +121,6 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
         <button onClick={handleSend}>Send</button>
       </div>
 
-      {/* Progress Indicator and Feedback Panel */}
-      <div className="progress-row">
-        <span className="progress-label">{Math.min(messages.length, minTurns)}/{minTurns} messages complete</span>
-        <div className="progress-bar" aria-label="Conversation progress" aria-valuemin={0} aria-valuemax={minTurns} aria-valuenow={Math.min(messages.length, minTurns)}>
-          <div className="progress-fill" style={{ width: `${Math.min(100, (messages.length / minTurns) * 100)}%` }} />
-        </div>
-      </div>
-
-      <FeedbackPanel
-        brand={brand}
-        region={region}
-        persona={persona}
-        sessionId={sessionIdRef.current}
-        conversation={messages}
-      />
     </div>
   );
 }
