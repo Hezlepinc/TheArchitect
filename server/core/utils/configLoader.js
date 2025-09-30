@@ -11,10 +11,12 @@ const AssistantConfigSchema = z.object({
   themeColor: z.string().min(1),
   // optional fields commonly used by the widget
   logoUrl: z.string().url().optional(),
+  subtitle: z.string().optional(),
   scheduleUrl: z.string().url().optional(),
   ctaUrl: z.string().url().optional(),
   reviewUrl: z.string().url().optional(),
   textUrl: z.string().optional(),
+  quickReplies: z.array(z.string().min(1)).max(4).optional(),
   contactInfo: z
     .object({
       phone: z.string().optional(),

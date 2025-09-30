@@ -5,7 +5,9 @@
     "persona":  "customer",
     "greeting":  "Welcome to In Charge Electric. How can I help you today?",
     "themeColor":  "#0056b3",
+  "subtitle": "We typically reply in a few minutes.",
     "logoUrl":  "https://cdn.inchargeelectricalservices.com/wp-content/uploads/2024/03/06163753/in-charge-logo-edited-793x128.png",
+  "quickReplies": ["Get a quote", "Electrical issue", "Talk to agent"],
     "reviewUrl":  "https://g.page/r/CXblPE9RcTcEEBM/review",
     "scheduleUrl":  "https://inchargeelectricalservices.com/request-quote/",
     "contactInfo":  {

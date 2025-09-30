@@ -98,7 +98,7 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
         <div className="header-main">
           <div className="header-text">
             <div className="chat-title">{config?.assistantName || "Assistant"}</div>
-            <div className="chat-subtitle">We typically reply in a few minutes.</div>
+            <div className="chat-subtitle">{config?.subtitle || "We typically reply in a few minutes."}</div>
           </div>
           <button className="chat-minimize" onClick={() => setIsOpen(false)} aria-label="Minimize chat">-</button>
         </div>
@@ -123,8 +123,12 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
 
       {messages.every((m) => m.sender !== "user") && config?.greeting && (
         <div className="quick-replies">
-          <button onClick={() => handleSendQuick("Just playing around")}>Just playing around</button>
-          <button onClick={() => handleSendQuick("I need Support")}>I need Support</button>
+          {(Array.isArray(config?.quickReplies) && config.quickReplies.length > 0
+            ? config.quickReplies
+            : ["Just playing around", "I need Support"]
+          ).slice(0, 4).map((qr, i) => (
+            <button key={i} onClick={() => handleSendQuick(qr)}>{qr}</button>
+          ))}
         </div>
       )}
 

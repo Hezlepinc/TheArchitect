@@ -5,7 +5,9 @@
     "persona":  "customer",
     "greeting":  "Welcome to Lenhart Electric. How can I help you today?",
     "themeColor":  "#004080",
+  "subtitle": "We typically reply in a few minutes.",
     "logoUrl":  "https://cdn.inchargeelectricalservices.com/wp-content/uploads/sites/3/2024/01/06170112/lenhart-white-edited-2-473x128.png",
+  "quickReplies": ["Book service", "Troubleshoot", "Talk to agent"],
     "reviewUrl":  "https://g.page/r/CRrsIGBZcZmSEBM/review",
     "scheduleUrl":  "https://lenhartelectric.setmore.com/",
     "contactInfo":  {
