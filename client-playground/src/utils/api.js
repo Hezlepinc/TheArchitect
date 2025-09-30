@@ -2,10 +2,16 @@
 
 export async function sendMessageToAPI(message, brand = "incharge", persona = "customer", sessionId = "default-session") {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE}/chat`, {
+    // Derive region via config discipline: map brand to region for playground only.
+    // Inline assumption: incharge→us-tx, lenhart→us-fl. Adjust if config changes.
+    const brandToRegion = { incharge: "us-tx", lenhart: "us-fl" };
+    const region = brandToRegion[String(brand).toLowerCase()] || "us-tx";
+
+    const url = `${import.meta.env.VITE_API_BASE}/api/chat/${brand}/${region}/${persona}`;
+    const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sessionId, message, brand, persona }),
+      body: JSON.stringify({ sessionId, message }),
     });
 
     if (!response.ok) {
@@ -13,8 +19,6 @@ export async function sendMessageToAPI(message, brand = "incharge", persona = "c
     }
 
     const data = await response.json();
-
-    // chatRouter returns { text, provider, via, rag }
     return data.text || "⚠️ No reply from assistant.";
   } catch (err) {
     console.error("Error sending message:", err);
