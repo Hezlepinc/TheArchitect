@@ -16,11 +16,13 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
   const [input, setInput] = useState("");
   const [config, setConfig] = useState(null);
   const [isTyping, setIsTyping] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
   const [unread, setUnread] = useState(0);
   const messagesRef = useRef(null);
   const prevLenRef = useRef(0);
   const sessionIdRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     sessionIdRef.current = getOrCreateSessionId(brand);
@@ -62,15 +64,30 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
     if (!trimmed) return;
     setInput("");
     setMessages((prev) => [...prev, { sender: "user", text: trimmed }]);
+    setIsSending(true);
     setIsTyping(true);
     try {
       const res = await sendMessage(brand, region, persona, trimmed, sessionIdRef.current);
+      if (!res || typeof res.text !== "string") {
+        throw new Error("invalid response");
+      }
       setMessages((prev) => [...prev, { sender: "ai", text: res.text }]);
-    } finally { setIsTyping(false); }
+    } catch (_e) {
+      setMessages((prev) => [...prev, { sender: "system", text: "Unable to send. Please check your connection and try again." }]);
+    } finally { setIsTyping(false); setIsSending(false); }
   };
 
   const onKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
+  };
+
+  const onInputChange = (e) => {
+    setInput(e.target.value);
+    const el = inputRef.current;
+    if (el) {
+      el.style.height = "auto";
+      el.style.height = Math.min(120, el.scrollHeight) + "px";
+    }
   };
 
   const themeVars = config?.themeColor ? { "--brand-color": config.themeColor } : {};
@@ -83,7 +100,7 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
 
   if (!isOpen) {
     return (
-      <div className={floating ? "chat-launcher floating" : "chat-launcher"} style={themeVars}>
+      <div className={(floating ? "chat-launcher floating" : "chat-launcher") + (unread > 0 ? " pulse" : "")} style={themeVars}>
         <button onClick={handleOpen} aria-label="Open chat">
           Chat
           {unread > 0 && <span className="badge" aria-label={`${unread} unread messages`}>{Math.min(unread, 9)}</span>}
@@ -109,14 +126,25 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
 
       <div className="messages" ref={messagesRef} aria-live="polite" aria-atomic="false">
         {messages.map((m, idx) => (
-          <div key={idx} className={m.sender}>
-            {m.text}
-            <div className="timestamp">{new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
+          <div key={idx} className={`message-row ${m.sender}`}>
+            {m.sender === "ai" && (
+              <span className="avatar ai" aria-hidden="true">{(config?.assistantName || "A").slice(0,1)}</span>
+            )}
+            <div className={`bubble ${m.sender}`}>
+              {m.text}
+              <div className="timestamp">{new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
+            </div>
+            {m.sender === "user" && (
+              <span className="avatar user" aria-hidden="true">Y</span>
+            )}
           </div>
         ))}
         {isTyping && (
-          <div className="ai typing">
-            {(config?.assistantName || "Assistant")} is typing <span className="typing-dots"><span></span><span></span><span></span></span>
+          <div className="message-row ai">
+            <span className="avatar ai" aria-hidden="true">{(config?.assistantName || "A").slice(0,1)}</span>
+            <div className="bubble ai typing">
+              {(config?.assistantName || "Assistant")} is typing <span className="typing-dots"><span></span><span></span><span></span></span>
+            </div>
           </div>
         )}
       </div>
@@ -133,8 +161,17 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
       )}
 
       <div className="input-row">
-        <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={onKeyDown} placeholder="Type your message..." />
-        <button onClick={handleSend}>Send</button>
+        <textarea
+          ref={inputRef}
+          rows={1}
+          value={input}
+          onChange={onInputChange}
+          onKeyDown={onKeyDown}
+          placeholder="Type your message..."
+          autoFocus
+          disabled={isSending}
+        />
+        <button onClick={handleSend} disabled={!input.trim() || isSending || isTyping}>{isSending ? "…" : "Send"}</button>
       </div>
 
       {config?.scheduleUrl && (
