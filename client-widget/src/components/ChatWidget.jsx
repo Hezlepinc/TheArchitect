@@ -86,7 +86,7 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
       <div className={floating ? "chat-launcher floating" : "chat-launcher"} style={themeVars}>
         <button onClick={handleOpen} aria-label="Open chat">
           Chat
-          {unread > 0 && <span className="badge" aria-label={`${unread} unread messages`}>{unread}</span>}
+          {unread > 0 && <span className="badge" aria-label={`${unread} unread messages`}>{Math.min(unread, 9)}</span>}
         </button>
       </div>
     );
@@ -94,17 +94,16 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
 
   return (
     <div className={containerClass} style={themeVars}>
-      <div className="chat-header gradient">
+      <div className="chat-header gradient full-bleed">
         <div className="header-main">
           <div className="header-left">
-            <span className="info-bubble" aria-hidden="true">i</span>
+            <span className="info-bubble large" aria-hidden="true">i</span>
             <div className="header-text">
               <div className="chat-title">{config?.assistantName || "Assistant"}</div>
-              <div className="chat-subtitle">{config?.subtitle || "We typically reply in a few minutes."}</div>
-              <div className="chat-byline">AI by {config?.brand || "Your Brand"}</div>
+              {/* subtitle removed per request */}
             </div>
           </div>
-          <button className="chat-minimize" onClick={() => setIsOpen(false)} aria-label="Minimize chat">-</button>
+          <button className="chat-minimize far-right" onClick={() => setIsOpen(false)} aria-label="Minimize chat">-</button>
         </div>
       </div>
 
@@ -141,6 +140,7 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
       {config?.scheduleUrl && (
         <div className="chat-footer-cta">
           <a className="cta-primary" href={config.scheduleUrl}>Schedule</a>
+          <div className="chat-byline right">AI by {config?.brand || "Your Brand"}</div>
         </div>
       )}
 

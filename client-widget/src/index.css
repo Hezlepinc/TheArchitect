@@ -26,15 +26,15 @@
 .chat-widget .messages .user {
   align-self: flex-end;
   background: #f3f4f6;
-  padding: 8px 10px;
-  border-radius: 12px;
+  padding: 6px 9px;
+  border-radius: 10px;
 }
 .chat-widget .messages .ai {
   align-self: flex-start;
   background: #fff;
   border: 1px solid #e5e7eb;
-  padding: 8px 10px;
-  border-radius: 12px;
+  padding: 6px 9px;
+  border-radius: 10px;
 }
 .chat-widget .messages .typing {
   opacity: 0.8;
@@ -129,10 +129,7 @@
   justify-content: flex-end;
   margin-bottom: 8px;
 }
-.chat-widget .chat-header img {
-  max-height: 28px;
-  width: auto;
-}
+.chat-widget .chat-header img { max-height: 28px; width: auto; }
 
 /* Launcher button when minimized */
 .chat-launcher {
@@ -166,6 +163,7 @@
   border-radius: 8px;
   overflow: hidden;
 }
+.chat-widget .chat-header.full-bleed { margin: -12px -12px 8px -12px; border-radius: 0; }
 .chat-widget .chat-header.gradient {
   background: linear-gradient(135deg, var(--brand-color), #1d4ed8);
   color: #fff;
@@ -189,6 +187,7 @@
   padding: 2px 8px;
   cursor: pointer;
 }
+.chat-widget .chat-header .chat-minimize.far-right { margin-right: 4px; }
 .chat-widget .chat-header .info-bubble {
   display: inline-flex;
   align-items: center;
@@ -201,6 +200,7 @@
   color: #fff;
   font-weight: 700;
 }
+.chat-widget .chat-header .info-bubble.large { width: 34px; height: 34px; }
 
 .chat-launcher button { position: relative; }
 .chat-launcher button .badge {
@@ -218,7 +218,7 @@
   text-align: center;
 }
 
-.chat-widget .chat-footer-cta { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+.chat-widget .chat-footer-cta { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; }
 .chat-widget .chat-footer-cta .cta-primary {
   display: block;
   text-align: center;
@@ -229,6 +229,7 @@
   border-radius: 8px;
   font-weight: 600;
 }
+.chat-widget .chat-footer-cta .chat-byline.right { justify-self: end; font-size: 11px; color: #6b7280; }
 
 /* Quick replies */
 .chat-widget .quick-replies {
