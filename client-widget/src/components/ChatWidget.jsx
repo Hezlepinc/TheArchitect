@@ -74,7 +74,12 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
   };
 
   const themeVars = config?.themeColor ? { "--brand-color": config.themeColor } : {};
-  const containerClass = `chat-widget${floating ? " floating" : ""}`;
+  const containerClass = `chat-widget${floating ? " floating" : ""} anim-in`;
+
+  const handleSendQuick = (text) => {
+    setInput(text);
+    setTimeout(handleSend, 0);
+  };
 
   if (!isOpen) {
     return (
@@ -89,23 +94,39 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
 
   return (
     <div className={containerClass} style={themeVars}>
-      <div className="chat-header">
-        {config?.logoUrl ? (
-          <img src={config.logoUrl} alt={config.brand || config.assistantName || "Brand"} />
-        ) : (
-          <strong>{config?.assistantName || "Assistant"}</strong>
+      <div className="chat-header gradient">
+        <div className="header-main">
+          <div className="header-text">
+            <div className="chat-title">{config?.assistantName || "Assistant"}</div>
+            <div className="chat-subtitle">We typically reply in a few minutes.</div>
+          </div>
+          <button className="chat-minimize" onClick={() => setIsOpen(false)} aria-label="Minimize chat">-</button>
+        </div>
+        {config?.logoUrl && (
+          <img className="chat-avatar" src={config.logoUrl} alt={config.brand || config.assistantName || "Brand"} />
         )}
-        <button className="chat-minimize" onClick={() => setIsOpen(false)} aria-label="Minimize chat">â€“</button>
       </div>
 
-      <div className="messages" ref={messagesRef}>
+      <div className="messages" ref={messagesRef} aria-live="polite" aria-atomic="false">
         {messages.map((m, idx) => (
-          <div key={idx} className={m.sender}>{m.text}</div>
+          <div key={idx} className={m.sender}>
+            {m.text}
+            <div className="timestamp">{new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
+          </div>
         ))}
         {isTyping && (
-          <div className="ai typing">{(config?.assistantName || "Assistant")} is typingâ€¦</div>
+          <div className="ai typing">
+            {(config?.assistantName || "Assistant")} is typing <span className="typing-dots"><span></span><span></span><span></span></span>
+          </div>
         )}
       </div>
+
+      {messages.every((m) => m.sender !== "user") && config?.greeting && (
+        <div className="quick-replies">
+          <button onClick={() => handleSendQuick("Just playing around")}>Just playing around</button>
+          <button onClick={() => handleSendQuick("I need Support")}>I need Support</button>
+        </div>
+      )}
 
       <div className="input-row">
         <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={onKeyDown} placeholder="Type your message..." />
@@ -123,4 +144,11 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
 
     </div>
   );
+}
+
+function handleSendQuickFactory(setInput, handleSend, text) {
+  return () => {
+    setInput(text);
+    setTimeout(handleSend, 0);
+  };
 }
