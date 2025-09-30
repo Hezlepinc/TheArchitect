@@ -163,13 +163,15 @@
   text-align: center;
 }
 
-.chat-widget .chat-actions {
+.chat-widget .chat-footer-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 8px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid #e5e7eb;
 }
-.chat-widget .chat-actions a {
+.chat-widget .chat-footer-actions a {
   background: var(--brand-color);
   color: #fff;
   text-decoration: none;

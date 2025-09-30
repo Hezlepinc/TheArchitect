@@ -98,15 +98,6 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
         <button className="chat-minimize" onClick={() => setIsOpen(false)} aria-label="Minimize chat">â€“</button>
       </div>
 
-      {config && (config.scheduleUrl || config.ctaUrl || config.reviewUrl || config.textUrl) && (
-        <div className="chat-actions">
-          {config.scheduleUrl && (<a href={config.scheduleUrl}>Schedule</a>)}
-          {config.ctaUrl && (<a href={config.ctaUrl}>Contact</a>)}
-          {config.reviewUrl && (<a href={config.reviewUrl} target="_blank" rel="noopener noreferrer">Reviews</a>)}
-          {config.textUrl && (<a href={config.textUrl}>Text</a>)}
-        </div>
-      )}
-
       <div className="messages" ref={messagesRef}>
         {messages.map((m, idx) => (
           <div key={idx} className={m.sender}>{m.text}</div>
@@ -120,6 +111,15 @@ export default function ChatWidget({ brand, region, persona, floating = true }) 
         <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={onKeyDown} placeholder="Type your message..." />
         <button onClick={handleSend}>Send</button>
       </div>
+
+      {config && (config.scheduleUrl || config.ctaUrl || config.reviewUrl || config.textUrl) && (
+        <div className="chat-footer-actions">
+          {config.scheduleUrl && (<a href={config.scheduleUrl}>Schedule</a>)}
+          {config.ctaUrl && (<a href={config.ctaUrl}>Contact</a>)}
+          {config.reviewUrl && (<a href={config.reviewUrl} target="_blank" rel="noopener noreferrer">Reviews</a>)}
+          {config.textUrl && (<a href={config.textUrl}>Text</a>)}
+        </div>
+      )}
 
     </div>
   );
