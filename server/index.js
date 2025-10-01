@@ -72,6 +72,8 @@ import widgetConfigRouter from "./routes/widgetConfigRouter.js";
 import feedbackDashboard from "./routes/feedbackDashboard.js";
 import feedbackRouter from "./routes/feedbackRouter.js";
 import crispWebhook from "./routes/crispWebhook.js";
+import crispAction from "./routes/crispAction.js";
+import crispPlugin from "./routes/crispPlugin.js";
 
 const app = express();
 let PORT = Number(process.env.PORT) || 3000;
@@ -89,6 +91,8 @@ app.use("/api/widget-config", widgetConfigRouter);
 app.use("/api/feedback", feedbackRouter);
 app.use("/feedback-dashboard", feedbackDashboard);
 app.use("/crisp", crispWebhook);
+app.use("/crisp", crispAction);
+app.use("/crisp", crispPlugin);
 
 // -----------------
 // Health endpoints
