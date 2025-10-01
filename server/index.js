@@ -93,6 +93,11 @@ app.use("/feedback-dashboard", feedbackDashboard);
 app.use("/crisp", crispWebhook);
 app.use("/crisp", crispAction);
 app.use("/crisp", crispPlugin);
+// Backward-compatible alias for older workflows expecting /api/crisp/webhook
+app.post("/api/crisp/webhook", (req, res, next) => {
+  req.url = "/webhook";
+  return crispWebhook(req, res, next);
+});
 
 // -----------------
 // Health endpoints
