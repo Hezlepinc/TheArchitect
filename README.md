@@ -95,3 +95,14 @@ curl -X POST http://localhost:3000/crisp/action \
   }'
 ```
 
+### Deployed URLs (Render)
+
+Base: `https://thearchitect-server-prod-16b4.onrender.com`
+
+- Webhook: `POST https://thearchitect-server-prod-16b4.onrender.com/crisp/webhook`
+- Action: `POST https://thearchitect-server-prod-16b4.onrender.com/crisp/action`
+- Callback: `POST https://thearchitect-server-prod-16b4.onrender.com/crisp/callback`
+- Settings: `GET https://thearchitect-server-prod-16b4.onrender.com/crisp/settings`
+- Dev hook: `POST https://thearchitect-server-prod-16b4.onrender.com/crisp/dev-hook`
+- Prod hook: `POST https://thearchitect-server-prod-16b4.onrender.com/crisp/prod-hook`
+
