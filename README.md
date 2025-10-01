@@ -40,3 +40,30 @@ git add .
 git commit -m "your message"
 git push
 
+## Crisp Webhook Integration
+
+1. Add a webhook in Crisp pointing to:
+   - `https://<your-ngrok-id>.ngrok.io/crisp/webhook`
+2. Select events:
+   - message:send (required)
+   - message:received (optional)
+3. Create REST API credentials in Crisp and set env vars:
+   - `CRISP_IDENTIFIER`, `CRISP_KEY`
+4. Optionally map website IDs to assistants via `CRISP_WEBSITE_MAP`:
+   - Example: `{ "<website_id>": { "brand": "incharge", "region": "us-tx", "persona": "customer" } }`
+
+Test locally (requires ngrok):
+
+```bash
+curl -X POST http://localhost:3000/crisp/webhook \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event": "message:send",
+    "data": {
+      "website_id": "<website_id>",
+      "session_id": "test-session-123",
+      "content": "Hello"
+    }
+  }'
+```
+
