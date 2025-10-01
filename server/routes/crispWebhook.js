@@ -34,24 +34,38 @@ function resolveAssistantRouting(websiteId) {
 
 const router = express.Router();
 
+function extractInbound(body) {
+  // Shape A: Crisp webhook { event: "message:send", data: { website_id, session_id, content } }
+  if (body && body.event === "message:send" && body.data) {
+    const d = body.data;
+    const content = (d.content || "").toString();
+    if (content.trim()) {
+      return { websiteId: d.website_id, sessionId: d.session_id, content };
+    }
+  }
+  // Shape B: Crisp Workflow "Send Webhook"
+  // { website_id, session_id, message: { from, content } }
+  if (body && body.website_id && body.session_id && body.message && body.message.from === "user") {
+    const content = (body.message.content || "").toString();
+    if (content.trim()) {
+      return { websiteId: body.website_id, sessionId: body.session_id, content };
+    }
+  }
+  // Shape C: minimal { website_id, session_id, content }
+  if (body && body.website_id && body.session_id && typeof body.content === "string") {
+    const content = body.content.toString();
+    if (content.trim()) {
+      return { websiteId: body.website_id, sessionId: body.session_id, content };
+    }
+  }
+  return null;
+}
+
 router.post("/webhook", async (req, res) => {
   try {
-    const body = req.body || {};
-    const event = body.event;
-    const data = body.data || {};
-
-    if (event !== "message:send") {
-      // Ack quickly for events we don't handle yet
-      return res.sendStatus(200);
-    }
-
-    const websiteId = data.website_id;
-    const sessionId = data.session_id;
-    const content = (data.content || "").toString();
-
-    if (!content.trim()) {
-      return res.sendStatus(200);
-    }
+    const inbound = extractInbound(req.body || {});
+    if (!inbound) return res.sendStatus(200);
+    const { websiteId, sessionId, content } = inbound;
 
     // Resolve assistant routing and load config
     const { brand, region, persona } = resolveAssistantRouting(websiteId);
@@ -77,30 +91,23 @@ router.post("/webhook", async (req, res) => {
 
     // Send reply back to Crisp (best-effort)
     try {
+      const pluginToken = process.env.CRISP_PLUGIN_TOKEN;
       const id = process.env.CRISP_IDENTIFIER;
       const key = process.env.CRISP_KEY;
-      if (!id || !key) {
-        logger.warn("Crisp webhook: missing CRISP_IDENTIFIER or CRISP_KEY");
-      } else {
-        const auth = Buffer.from(`${id}:${key}`).toString("base64");
-        const url = `https://api.crisp.chat/v1/website/${websiteId}/conversation/${sessionId}/message`;
-        const resp = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Basic ${auth}`,
-          },
-          body: JSON.stringify({
-            type: "text",
-            from: "operator",
-            origin: "chat",
-            content: aiText,
-          }),
-        });
-        if (!resp.ok) {
-          const t = await resp.text().catch(() => "");
-          logger.warn("Crisp API send failed", { status: resp.status, body: t?.slice(0, 500) });
-        }
+      const url = `https://api.crisp.chat/v1/website/${websiteId}/conversation/${sessionId}/message`;
+      const headers = { "Content-Type": "application/json" };
+      if (pluginToken) headers.Authorization = `Bearer ${pluginToken}`;
+      else if (id && key) headers.Authorization = `Basic ${Buffer.from(`${id}:${key}`).toString("base64")}`;
+      else logger.warn("Crisp webhook: missing auth (CRISP_PLUGIN_TOKEN or IDENTIFIER/KEY)");
+
+      const resp = await fetch(url, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ type: "text", from: "operator", origin: "chat", content: aiText }),
+      });
+      if (!resp.ok) {
+        const t = await resp.text().catch(() => "");
+        logger.warn("Crisp API send failed", { status: resp.status, body: t?.slice(0, 500) });
       }
     } catch (e) {
       logger.error("Crisp webhook: send back failed", { error: e?.message });
