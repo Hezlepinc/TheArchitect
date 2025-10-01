@@ -67,3 +67,31 @@ curl -X POST http://localhost:3000/crisp/webhook \
   }'
 ```
 
+### Crisp Plugin (Action URL)
+
+Action URL: `POST /crisp/action`
+
+Payload example:
+
+```json
+{
+  "event": "message:send",
+  "website_id": "<website_id>",
+  "session_id": "<session_id>",
+  "message": { "from": "user", "content": "Hello" }
+}
+```
+
+Test:
+
+```bash
+curl -X POST http://localhost:3000/crisp/action \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event":"message:send",
+    "website_id":"<website_id>",
+    "session_id":"test-session-123",
+    "message": {"from":"user","content":"Hello"}
+  }'
+```
+
