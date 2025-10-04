@@ -102,6 +102,11 @@ router.post("/action", async (req, res) => {
   }
 });
 
+// Minimal GET to verify wiring without requiring POST
+router.get("/action", (_req, res) => {
+  res.status(200).send("✅ Crisp action endpoint active");
+});
+
 export default router;
 
 

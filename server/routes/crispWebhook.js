@@ -120,6 +120,11 @@ router.post("/webhook", async (req, res) => {
   }
 });
 
+// Minimal GET to verify wiring without requiring POST
+router.get("/webhook", (_req, res) => {
+  res.status(200).send("✅ Crisp webhook endpoint active");
+});
+
 export default router;
 
 
