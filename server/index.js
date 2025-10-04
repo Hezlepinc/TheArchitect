@@ -79,6 +79,21 @@ const app = express();
 let PORT = Number(process.env.PORT) || 3000;
 
 app.use(cors(makeCorsOptions()));
+
+// Tolerant JSON parser for Crisp routes only: never fail the request on bad JSON
+app.use("/crisp", (req, res, next) => {
+  const jsonMiddleware = express.json({ strict: false });
+  jsonMiddleware(req, res, (err) => {
+    if (err) {
+      logger.warn("Crisp route received invalid JSON; continuing with empty body", { error: err?.message });
+      req.body = {};
+      return next();
+    }
+    return next();
+  });
+});
+
+// Standard JSON parser for all other routes
 app.use(express.json());
 
 app.use((req, _res, next) => {
