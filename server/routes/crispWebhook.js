@@ -2,6 +2,7 @@ import express from "express";
 import { loadAssistantConfig } from "../core/utils/configLoader.js";
 import { chatOrchestrator } from "../core/orchestrator/chatOrchestrator.js";
 import { logger } from "../core/utils/logger.js";
+import { sendCrispMessage } from "../core/utils/crispClient.js";
 
 // Minimal Crisp webhook router
 // Assumptions:
@@ -91,24 +92,7 @@ router.post("/webhook", async (req, res) => {
 
     // Send reply back to Crisp (best-effort)
     try {
-      const pluginToken = process.env.CRISP_PLUGIN_TOKEN;
-      const id = process.env.CRISP_IDENTIFIER;
-      const key = process.env.CRISP_KEY;
-      const url = `https://api.crisp.chat/v1/website/${websiteId}/conversation/${sessionId}/message`;
-      const headers = { "Content-Type": "application/json" };
-      if (pluginToken) headers.Authorization = `Bearer ${pluginToken}`;
-      else if (id && key) headers.Authorization = `Basic ${Buffer.from(`${id}:${key}`).toString("base64")}`;
-      else logger.warn("Crisp webhook: missing auth (CRISP_PLUGIN_TOKEN or IDENTIFIER/KEY)");
-
-      const resp = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ type: "text", from: "operator", origin: "chat", content: aiText }),
-      });
-      if (!resp.ok) {
-        const t = await resp.text().catch(() => "");
-        logger.warn("Crisp API send failed", { status: resp.status, body: t?.slice(0, 500) });
-      }
+      await sendCrispMessage({ websiteId, sessionId, text: aiText, from: "operator", origin: "chat" });
     } catch (e) {
       logger.error("Crisp webhook: send back failed", { error: e?.message });
     }

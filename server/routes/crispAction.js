@@ -2,6 +2,7 @@ import express from "express";
 import { loadAssistantConfig } from "../core/utils/configLoader.js";
 import { chatOrchestrator } from "../core/orchestrator/chatOrchestrator.js";
 import { logger } from "../core/utils/logger.js";
+import { sendCrispMessage } from "../core/utils/crispClient.js";
 
 function resolveAssistantRouting(websiteId) {
   try {
@@ -25,34 +26,7 @@ function resolveAssistantRouting(websiteId) {
   return { brand, region, persona };
 }
 
-async function sendReplyToCrisp({ websiteId, sessionId, text }) {
-  const url = `https://api.crisp.chat/v1/website/${websiteId}/conversation/${sessionId}/message`;
-  const pluginToken = process.env.CRISP_PLUGIN_TOKEN;
-  const id = process.env.CRISP_IDENTIFIER;
-  const key = process.env.CRISP_KEY;
-
-  const headers = { "Content-Type": "application/json" };
-  if (pluginToken) {
-    headers.Authorization = `Bearer ${pluginToken}`;
-  } else if (id && key) {
-    headers.Authorization = `Basic ${Buffer.from(`${id}:${key}`).toString("base64")}`;
-  }
-
-  const resp = await fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({
-      type: "text",
-      from: "operator",
-      origin: "plugin",
-      content: text,
-    }),
-  });
-  if (!resp.ok) {
-    const body = await resp.text().catch(() => "");
-    logger.warn("Crisp action send failed", { status: resp.status, body: body?.slice(0, 500) });
-  }
-}
+// sendReplyToCrisp is now centralized in crispClient.sendCrispMessage
 
 const router = express.Router();
 
@@ -90,7 +64,7 @@ router.post("/action", async (req, res) => {
     }
 
     try {
-      await sendReplyToCrisp({ websiteId, sessionId, text: aiText });
+      await sendCrispMessage({ websiteId, sessionId, text: aiText, from: "operator", origin: "plugin" });
     } catch (e) {
       logger.error("Crisp action: reply failed", { error: e?.message });
     }
