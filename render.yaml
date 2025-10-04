@@ -27,20 +27,7 @@
       - key: ANTHROPIC_API_KEY
         sync: false
 
-  # ----------------------
-  # Widget (Prod) - disabled (moving to Crisp widget)
-  # ----------------------
-  # - type: web
-  #   name: thearchitect-widget-prod
-  #   env: static
-  #   rootDir: client-widget
-  #   buildCommand: npm install && npm run build:production
-  #   staticPublishPath: dist
-  #   domains:
-  #     - widget.incharge-ai.com
-  #   envVars:
-  #     - key: VITE_API_BASE
-  #       value: https://api.incharge-ai.com/api
+  # Widget deployment removed (client-widget deleted)
 
   # ----------------------
   # Playground (Prod)

@@ -5,5 +5,4 @@
 - Expose `/api/chat` and `/api/widget-config`
 
 ## Frontend
-- Deploy `client-widget/` as a static site
-- Configure CORS for cross-domain use
+- The standalone widget has been removed. Use the playground in `client-playground/` for demos.

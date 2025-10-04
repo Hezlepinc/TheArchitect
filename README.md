@@ -5,7 +5,6 @@ Multi-tenant AI Assistant Platform for managing **multi-brand, multi-location, m
 ## Structure
 
 - `server/` → backend APIs, orchestrator, config loader
-- `client-widget/` → frontend chat widget (React)
 - `config/assistants/` â†’ brand/region/persona JSON configs
 - `docs/` â†’ design notes, research, deployment steps
 
@@ -13,7 +12,6 @@ Multi-tenant AI Assistant Platform for managing **multi-brand, multi-location, m
 
 1. `npm install`
 2. `npm run dev` (server)
-3. `npm run dev` (client-widget)
 
 ## Health & Checks
 
